@@ -31,23 +31,20 @@
     .button-container {
       text-align: center;
     }
-
-    #download-link {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-      color: #333;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Mesclar PDFs</h1>
-    <div class="form-group">
-      <label for="pdf-files">Selecione os arquivos PDF:</label>
-      <input type="file" id="pdf-files" multiple>
-    </div>
-    <div class="button-container">
-      <
+    <form action="merge.php" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="pdf-files">Selecione os arquivos PDF:</label>
+        <input type="file" name="pdf-files[]" id="pdf-files" multiple>
+      </div>
+      <div class="button-container">
+        <button type="submit">Mesclar PDFs</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

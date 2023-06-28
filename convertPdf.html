@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mesclar PDFs</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@3.0.0/dist/pdf-lib.min.js"></script>
+</head>
+<body>
+  <input type="file" id="pdf-files" multiple>
+  <button onclick="mergePDFs()">Mesclar PDFs</button>
+  <script>
+    async function mergePDFs() {
+      const fileInput = document.getElementById('pdf-files');
+      const files = Array.from(fileInput.files);
+
+      if (files.length < 2) {
+        alert('Selecione pelo menos 2 arquivos PDF para mesclar.');
+        return;
+      }
+
+      const pdfDoc = await PDFLib.PDFDocument.create();
+
+      for (const file of files) {
+        const reader = new FileReader();
+
+        await new Promise((resolve) => {
+          reader.onloadend = resolve;
+          reader.readAsArrayBuffer(file);
+        });
+
+        const pdfBytes = new Uint8Array(reader.result);
+        const tempDoc = await PDFLib.PDFDocument.load(pdfBytes);
+        const copiedPages = await pdfDoc.copyPages(tempDoc, tempDoc.getPageIndices());
+        copiedPages.forEach((page) => pdfDoc.addPage(page));
+      }
+
+      const mergedPdfBytes = await pdfDoc.save();
+
+      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const blobUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'merged.pdf';
+      link.click();
+
+      URL.revokeObjectURL(blobUrl);
+    }
+  </script>
+</body>
+</html>

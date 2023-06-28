@@ -2,12 +2,59 @@
 <html>
 <head>
   <title>Mesclar PDFs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .button-container {
+      text-align: center;
+    }
+
+    #download-link {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@3.0.0/dist/pdf-lib.min.js"></script>
 </head>
 <body>
-  <input type="file" id="pdf-files" multiple>
-  <button onclick="mergePDFs()">Mesclar PDFs</button>
-  <a id="download-link" style="display: none;"></a>
+  <div class="container">
+    <h1>Mesclar PDFs</h1>
+    <div class="form-group">
+      <label for="pdf-files">Selecione os arquivos PDF:</label>
+      <input type="file" id="pdf-files" multiple>
+    </div>
+    <div class="button-container">
+      <button onclick="mergePDFs()">Mesclar PDFs</button>
+    </div>
+    <a id="download-link"></a>
+  </div>
   <script>
     async function mergePDFs() {
       const fileInput = document.getElementById('pdf-files');
@@ -42,6 +89,7 @@
       const downloadLink = document.getElementById('download-link');
       downloadLink.href = blobUrl;
       downloadLink.download = 'merged.pdf';
+      downloadLink.innerHTML = 'Clique aqui para baixar o PDF mesclado';
       downloadLink.style.display = 'block';
     }
   </script>

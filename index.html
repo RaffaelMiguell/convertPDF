@@ -50,44 +50,4 @@
       <input type="file" id="pdf-files" multiple>
     </div>
     <div class="button-container">
-      <button onclick="mergePDFs()">Mesclar PDFs</button>
-    </div>
-    <a id="download-link"></a>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/2.8.0/pdf-lib.min.js"></script>
-  <script>
-    async function mergePDFs() {
-      const fileInput = document.getElementById('pdf-files');
-      const files = Array.from(fileInput.files);
-
-      if (files.length < 2) {
-        alert('Selecione pelo menos 2 arquivos PDF para mesclar.');
-        return;
-      }
-
-      const mergedPdf = await mergePDFFiles(files);
-      const blob = new Blob([mergedPdf], { type: 'application/pdf' });
-      const blobUrl = URL.createObjectURL(blob);
-
-      const downloadLink = document.getElementById('download-link');
-      downloadLink.href = blobUrl;
-      downloadLink.download = 'merged.pdf';
-      downloadLink.innerHTML = 'Clique aqui para baixar o PDF mesclado';
-      downloadLink.style.display = 'block';
-    }
-
-    async function mergePDFFiles(files) {
-      const mergedPdf = await PDFLib.PDFDocument.create();
-
-      for (const file of files) {
-        const pdfBytes = await file.arrayBuffer();
-        const tempDoc = await PDFLib.PDFDocument.load(pdfBytes);
-        const copiedPages = await mergedPdf.copyPages(tempDoc, tempDoc.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
-      }
-
-      return await mergedPdf.save();
-    }
-  </script>
-</body>
-</html>
+      <

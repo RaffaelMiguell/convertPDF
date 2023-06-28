@@ -7,8 +7,9 @@ if (!isset($_FILES['pdf-files'])) {
   echo 'Nenhum arquivo foi enviado.';
   exit;
 }
+$files = $_GET['pdf-files']['tmp_name'];
 
-$files = $_FILES['pdf-files']['tmp_name'];
+// $files = $_FILES['pdf-files']['tmp_name'];
 $fileCount = count($files);
 
 // Verifica se foram enviados pelo menos dois arquivos

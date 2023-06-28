@@ -41,7 +41,6 @@
       text-decoration: none;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@3.0.0/dist/pdf-lib.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -55,6 +54,7 @@
     </div>
     <a id="download-link"></a>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/2.8.0/pdf-lib.min.js"></script>
   <script>
     async function mergePDFs() {
       const fileInput = document.getElementById('pdf-files');
@@ -65,25 +65,8 @@
         return;
       }
 
-      const pdfDoc = await PDFLib.PDFDocument.create();
-
-      for (const file of files) {
-        const reader = new FileReader();
-
-        await new Promise((resolve) => {
-          reader.onloadend = resolve;
-          reader.readAsArrayBuffer(file);
-        });
-
-        const pdfBytes = new Uint8Array(reader.result);
-        const tempDoc = await PDFLib.PDFDocument.load(pdfBytes);
-        const copiedPages = await pdfDoc.copyPages(tempDoc, tempDoc.getPageIndices());
-        copiedPages.forEach((page) => pdfDoc.addPage(page));
-      }
-
-      const mergedPdfBytes = await pdfDoc.save();
-
-      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const mergedPdf = await mergePDFFiles(files);
+      const blob = new Blob([mergedPdf], { type: 'application/pdf' });
       const blobUrl = URL.createObjectURL(blob);
 
       const downloadLink = document.getElementById('download-link');
@@ -91,6 +74,19 @@
       downloadLink.download = 'merged.pdf';
       downloadLink.innerHTML = 'Clique aqui para baixar o PDF mesclado';
       downloadLink.style.display = 'block';
+    }
+
+    async function mergePDFFiles(files) {
+      const mergedPdf = await PDFLib.PDFDocument.create();
+
+      for (const file of files) {
+        const pdfBytes = await file.arrayBuffer();
+        const tempDoc = await PDFLib.PDFDocument.load(pdfBytes);
+        const copiedPages = await mergedPdf.copyPages(tempDoc, tempDoc.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      return await mergedPdf.save();
     }
   </script>
 </body>
